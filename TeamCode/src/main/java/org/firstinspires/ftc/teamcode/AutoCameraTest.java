@@ -63,7 +63,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
 @Autonomous(name = "Red Alliance Backstage", group = "Concept")
-@Disabled
+//Disabled
 public class AutoCameraTest extends LinearOpMode {
 
     final double DESIRED_DISTANCE = 10; // how close the camera should get to the object (inches)
@@ -89,6 +89,11 @@ public class AutoCameraTest extends LinearOpMode {
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
     private AprilTagDetection desiredTag = null;
+
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/RedCube.tflite";
+    private static final String[] LABELS = {
+            "RedCube1"
+    };
     private int myExposure;
 
     //arm variables
@@ -496,9 +501,9 @@ public class AutoCameraTest extends LinearOpMode {
             // Use setModelAssetName() if the TF Model is built in as an asset.
             // Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
             //.setModelAssetName(TFOD_MODEL_ASSET)
-            //.setModelFileName(TFOD_MODEL_FILE)
+            .setModelFileName(TFOD_MODEL_FILE)
 
-            //.setModelLabels(LABELS)
+            .setModelLabels(LABELS)
             //.setIsModelTensorFlow2(true)
             //.setIsModelQuantized(true)
             //.setModelInputSize(300)

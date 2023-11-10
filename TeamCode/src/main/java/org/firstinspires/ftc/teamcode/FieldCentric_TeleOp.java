@@ -41,7 +41,7 @@ public class FieldCentric_TeleOp extends LinearOpMode {
         //arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         int position = arm.getCurrentPosition();
         int armMin = 0;
-        int armMax = 470;
+        int armMax = 705;
         double power = 0;
 
 
@@ -72,9 +72,11 @@ public class FieldCentric_TeleOp extends LinearOpMode {
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
             // The equivalent button is start on Xbox-style controllers.
+
             if (gamepad1.options) {
                 imu.resetYaw();
             }
+
 
             double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
@@ -130,6 +132,7 @@ public class FieldCentric_TeleOp extends LinearOpMode {
             //Claw stuff
 
             claw.setPower(gamepad2.right_trigger * -2 + 0.7);
+
             if (-gamepad2.left_stick_y > 0.5){
                 position = arm.getCurrentPosition() + 30;
                 power = 1;
@@ -141,7 +144,7 @@ public class FieldCentric_TeleOp extends LinearOpMode {
             }
 
             if (gamepad2.left_trigger > 0.5) {
-                armMax = arm.getCurrentPosition();
+                //armMax = arm.getCurrentPosition();
             } else {
                 if (position < armMin){
                     position = armMin;
@@ -149,12 +152,12 @@ public class FieldCentric_TeleOp extends LinearOpMode {
                     position = armMax;
                 }
                 if(gamepad2.y){
-                    power = 0.6;
-                    position = armMax - 200; //270
+                    power = 0.2;
+                    position = armMax - 235; //470
                 }
                 if(gamepad2.a){
-                    power = 0.6;
-                    position = armMax-40; //430
+                    power = 0.2;
+                    position = armMax-40; //665
                 }
             }
             // ((DcMotorEx) arm).setTargetPositionTolerance(20);
