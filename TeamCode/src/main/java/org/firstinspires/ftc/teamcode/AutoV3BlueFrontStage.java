@@ -33,7 +33,6 @@ import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -68,9 +67,9 @@ import java.util.concurrent.TimeUnit;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@Autonomous(name = "AutoV3 Red Alliance FrontStage", group = "Concept")
+@Autonomous(name = "AutoV3 Blue Alliance FrontStage", group = "Concept")
 //@Disabled
-public class AutoV3RedFrontStage extends LinearOpMode {
+public class AutoV3BlueFrontStage extends LinearOpMode {
 
     double DESIRED_DISTANCE = 5; // how close the camera should get to the object (inches)
 
@@ -110,7 +109,7 @@ public class AutoV3RedFrontStage extends LinearOpMode {
     static final int MAX_ARM_POSITION = 705;
 
     static final int ARM_ANGLE_POSITION_FROM_MAX = 180; //546
-    private static final String TFOD_MODEL_ASSET = "RedCube.tflite";
+    private static final String TFOD_MODEL_ASSET = "BlueCube.tflite";
     private static final String[] LABELS = {
             "BlueCube1",
             "RedCube1",
@@ -209,7 +208,7 @@ public class AutoV3RedFrontStage extends LinearOpMode {
 
                 //Step 2 - turn to look at left spike
                 if(currentStep == 2){
-                    turn(27);
+                    turn(21);
                     stopRobot();
                     currentStep = 3;
                     runtime.reset();
@@ -222,7 +221,7 @@ public class AutoV3RedFrontStage extends LinearOpMode {
                         //go through list of recognitions and look for pixel
                         for(Recognition recognition : currentRecognitions){
                             telemetryTfod();
-                            if(recognition.getLabel() == "RedCube1"){
+                            if(recognition.getLabel() == "BlueCube1"){
                                 currentStep = 4;
                                 pixelLocation = "left";
                                 pixelFound = true;
@@ -255,14 +254,14 @@ public class AutoV3RedFrontStage extends LinearOpMode {
 
                 //Step 6 - point towards backdrop from left mark
                 if(currentStep == 6){
-                    turn(-(27+90));
+                    turn((90-(21+CENTER_PIXEL_CAMERA_ERROR)));
                     stopRobot();
                     currentStep = 20;
                 }
 
                 //Step 7 - rotation clockwise to check center spike mark
                 if (currentStep == 7){
-                    turn(-(27+CENTER_PIXEL_CAMERA_ERROR));
+                    turn(-(21+CENTER_PIXEL_CAMERA_ERROR));
                     stopRobot();
                     currentStep = 8;
                     runtime.reset();
@@ -274,7 +273,7 @@ public class AutoV3RedFrontStage extends LinearOpMode {
                         List<Recognition> currentRecognitions = tfod.getRecognitions();
                         //go through list of recognitions and look for pixel
                         for(Recognition recognition : currentRecognitions){
-                            if(recognition.getLabel() == "RedCube1"){
+                            if(recognition.getLabel() == "BlueCube1"){
                                 currentStep = 9;
                                 pixelLocation = "center";
                                 pixelFound = true;
@@ -292,7 +291,7 @@ public class AutoV3RedFrontStage extends LinearOpMode {
 
                 //Step 9 - move forward towards center spike mark
                 if(currentStep == 9){
-                    moveDistance(0.25,-(12.5 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.25,-(15 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     sleep(50);
                     currentStep = 10;
@@ -300,28 +299,28 @@ public class AutoV3RedFrontStage extends LinearOpMode {
 
                 //Step 10 - back away from center mark, dropping off purple pixel
                 if(currentStep == 10){
-                    moveDistance(0.25,(12.5+DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.25,(15 +DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     currentStep = 11;
                 }
 
                 //Step 11 - point towards backdrop from center mark
                 if(currentStep == 11){
-                    turn(-(90-CENTER_PIXEL_CAMERA_ERROR));
+                    turn((90-CENTER_PIXEL_CAMERA_ERROR));
                     stopRobot();
                     currentStep = 20;
                 }
 
                 //Step 12 - turn towards right spike mark
                 if(currentStep == 12){
-                    turn(-(28 - CENTER_PIXEL_CAMERA_ERROR));
+                    turn(-(35 - CENTER_PIXEL_CAMERA_ERROR));
                     stopRobot();
                     currentStep = 13;
                 }
 
                 //Step 13 - move forward towards right spike mark
                 if(currentStep == 13){
-                    moveDistance(0.25, -(10 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.25, -(15 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     sleep(50);
                     currentStep = 14;
@@ -329,14 +328,14 @@ public class AutoV3RedFrontStage extends LinearOpMode {
 
                 //Step 14 - move backward from right spike
                 if(currentStep == 14){
-                    moveDistance(0.25, (10 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.25, (15 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     currentStep = 15;
                 }
 
                 //Step 15 - point towards backdrop from right spike
                 if(currentStep == 15){
-                    turn(-(90-(28+CENTER_PIXEL_CAMERA_ERROR)));
+                    turn((35+90));
                     stopRobot();
                     currentStep = 20;
                     DESIRED_DISTANCE -= 2;
@@ -352,11 +351,11 @@ public class AutoV3RedFrontStage extends LinearOpMode {
                     setManualExposure(20, 250); //reduce motion blur
 
                     if (pixelLocation == "left") {
-                        DESIRED_TAG_ID = 4;
+                        DESIRED_TAG_ID = 1;
                     } else if (pixelLocation == "center") {
-                        DESIRED_TAG_ID = 5;
+                        DESIRED_TAG_ID = 2;
                     } else {
-                        DESIRED_TAG_ID = 6;
+                        DESIRED_TAG_ID = 3;
                     }
 
                     currentStep = 21;
@@ -365,55 +364,60 @@ public class AutoV3RedFrontStage extends LinearOpMode {
                 if(currentStep == 21){
                     moveDistance(0.25,-18);
                     sleep(400);
-                    turn(15);
+                    strafe(0.5,300,true);
+                    turn(-15);
                     currentStep = 22;
+                    runtime.reset();
                 }
                 //Step 22 - move to backdrop using april tag
                 if(currentStep == 22){
-                    List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-                    for (AprilTagDetection detection : currentDetections){
-                        if((detection.metadata != null) && (detection.id == DESIRED_TAG_ID)){
-                            targetFound = true;
-                            desiredTag = detection;
-                            break; //dont look any futher
+                    if(runtime.milliseconds() < 4000) {
+                        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+                        for (AprilTagDetection detection : currentDetections) {
+                            if ((detection.metadata != null) && (detection.id == DESIRED_TAG_ID)) {
+                                targetFound = true;
+                                desiredTag = detection;
+                                break; //dont look any futher
+                            }
                         }
-                    }
 
-                    if(targetFound){
-                        // Determine heading, range and Yaw (tag image rotation) error so we can use them to control the robot automatically.
-                        double  rangeError      = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
-                        double  headingError    = desiredTag.ftcPose.bearing;
-                        double  yawError        = desiredTag.ftcPose.yaw;
+                        if (targetFound) {
+                            // Determine heading, range and Yaw (tag image rotation) error so we can use them to control the robot automatically.
+                            double rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
+                            double headingError = desiredTag.ftcPose.bearing;
+                            double yawError = desiredTag.ftcPose.yaw;
 
-                        if ((rangeError < 7) && (Math.abs(headingError) < 5) && (Math.abs(yawError) < 5)){
-                            //If close stop
-                            drive = 0;
-                            turn = 0;
-                            strafe = 0;
-                            currentStep = 23;
-                        }
-                        else{
-                            // Use the speed and turn "gains" to calculate how we want the robot to move.
-                            drive  = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
-                            turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
+                            if ((rangeError < 7) && (Math.abs(headingError) < 5) && (Math.abs(yawError) < 5)) {
+                                //If close stop
+                                drive = 0;
+                                turn = 0;
+                                strafe = 0;
+                                currentStep = 23;
+                            } else {
+                                // Use the speed and turn "gains" to calculate how we want the robot to move.
+                                drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
+                                turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
+                                strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
+                                telemetry.addData("Auto", "Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
+                            }
+
+                            drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
+                            turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
                             strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
-                            telemetry.addData("Auto","Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
+                            telemetry.addData("Auto", "Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
+
+                            // Apply desired axes motions to the robot
+                            telemetry.addData("Is it working: ", "Yes");
+                            moveRobot(-drive, -strafe, turn);
+                            sleep(10);
+                            stopRobot();
+                        } else {
+                            sleep(10);
+                            stopRobot();
                         }
-
-                        drive  = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
-                        turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
-                        strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
-                        telemetry.addData("Auto","Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
-
-                        // Apply desired axes motions to the robot
-                        telemetry.addData("Is it working: ", "Yes");
-                        moveRobot(-drive, -strafe, turn);
-                        sleep(10);
-                        stopRobot();
                     }
-                    else {
-                        sleep(10);
-                        stopRobot();
+                    else{
+                        currentStep = 27;
                     }
                 }
 
@@ -449,21 +453,27 @@ public class AutoV3RedFrontStage extends LinearOpMode {
                 if(currentStep == 26){
                     if(pixelLocation == "left")
                     {
-                        strafe(0.7,900,true);
+                        strafe(0.7,900,false);
                     }
                     else if (pixelLocation == "center"){
-                        strafe(0.7,600,true);
+                        strafe(0.7,600,false);
                     } else{
-                        strafe(0.7,300,true);
+                        strafe(0.7,300,false);
                     }
                     sleep(10);
                     claw.setPower(0);
-                    turn(-90);
+                    turn(90);
                     stopRobot();
-                    currentStep = 27;
+                    currentStep = 0;
                 }
 
-                //Step 27 - may need to rotate to a good position
+                //Step 27 - if April tags dont work
+                if(currentStep == 27){
+                    moveDistance(0.5,-12);
+                    stopRobot();
+                    currentStep = 0;
+                    turn(90);
+                }
                 // Push telemetry to the Driver Station.
                 telemetry.addData("current step", currentStep);
                 telemetry.addData("pixel found", pixelFound);
@@ -821,3 +831,5 @@ public class AutoV3RedFrontStage extends LinearOpMode {
         turn(error);
     }
 }   // end class
+// penis :)
+//I love grantington
