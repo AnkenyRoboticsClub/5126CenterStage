@@ -21,6 +21,7 @@ public class FieldCentric_TeleOp extends LinearOpMode {
     static final double DEGREES_PER_TICK = (360 / ARM_COUNTS_PER_MOTOR_REV);
     private CRServo claw;
     private DcMotor arm;
+    private DcMotor armBoost;
 
 
     @Override
@@ -34,6 +35,7 @@ public class FieldCentric_TeleOp extends LinearOpMode {
         DcMotor motorBackRight = hardwareMap.dcMotor.get("Motor1");
         claw = hardwareMap.get(CRServo.class, "claw");
         arm = hardwareMap.get(DcMotor.class, "arm"); //Core ex motor
+        armBoost = hardwareMap.get(DcMotor.class, "armBoost");
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -43,6 +45,7 @@ public class FieldCentric_TeleOp extends LinearOpMode {
         int armMin = 0;
         int armMax = 705;
         double power = 0;
+        double armPower = 0;
 
 
         //Reverse the motors that are reversed
@@ -134,16 +137,16 @@ public class FieldCentric_TeleOp extends LinearOpMode {
             claw.setPower(gamepad2.right_trigger * -2 + 0.7);
 
             if (-gamepad2.left_stick_y > 0.5){
-                position = arm.getCurrentPosition() + 30;
+                position = arm.getCurrentPosition() + 50;
                 power = 1;
             } else if (-gamepad2.left_stick_y < -0.5){
-                position = arm.getCurrentPosition() - 30;
+                position = arm.getCurrentPosition() - 50;
                 power = 1;
             } else{
                 power = 0;
             }
 
-            if (gamepad2.left_trigger > 0.5) {
+            if (gamepad2.left_bumper) {
                 //armMax = arm.getCurrentPosition();
             } else {
                 if (position < armMin){
@@ -160,6 +163,13 @@ public class FieldCentric_TeleOp extends LinearOpMode {
                     position = armMax-40; //665
                 }
             }
+            if((!(gamepad2.y || gamepad2.a)) && (position > armMin + 60) && (position < armMax - 60)){
+                armPower = -gamepad2.left_stick_y * gamepad2.left_trigger;
+            }
+            else{
+                armPower = 0;
+            }
+            armBoost.setPower(armPower);
             // ((DcMotorEx) arm).setTargetPositionTolerance(20);
             arm.setPower(power);
             arm.setTargetPosition(position);
@@ -170,6 +180,7 @@ public class FieldCentric_TeleOp extends LinearOpMode {
             telemetry.addData("Arm setpoint", position);
             telemetry.addData("Claw position", claw.getDirection());
             telemetry.addData("Motor","%.2f, %.2f, %.2f, %.2f", frontLeftPower, frontRightPower, backLeftPower, backRightPower);
+            telemetry.addData("IMU: ", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
             telemetry.update();
         }
     }

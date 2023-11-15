@@ -18,7 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @Autonomous(name="Auto BlueFar", group="Robot")
-//@Disabled
+@Disabled
 public class AutoBlueFar extends LinearOpMode{
     static final double COUNTS_PER_MOTOR_REV = 537.7; //Ticks per revolution
     static final double DRIVE_GEAR_REDUCTION = 1.0; // No External Gearing

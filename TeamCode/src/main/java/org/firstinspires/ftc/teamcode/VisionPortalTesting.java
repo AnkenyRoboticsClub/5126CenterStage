@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import android.util.Size;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -52,7 +53,7 @@ import java.util.Locale;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
 @Autonomous(name = "Concept: Vision Portal", group = "Concept")
-//@Disabled
+@Disabled
 public class VisionPortalTesting extends LinearOpMode {
     private RedPropThreshold redPropThreshold; //Create an object of the VisionProcessor Class
     private VisionPortal portal;
