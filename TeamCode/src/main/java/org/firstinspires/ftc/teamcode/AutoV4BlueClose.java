@@ -108,11 +108,9 @@ public class AutoV4BlueClose extends LinearOpMode {
     static final int MAX_ARM_POSITION = 705;
 
     static final int ARM_ANGLE_POSITION_FROM_MAX = 180; //546
-    private static final String TFOD_MODEL_ASSET = "BlueCube.tflite";
+    private static final String TFOD_MODEL_ASSET = "BlueCubeNEW.tflite";
     private static final String[] LABELS = {
             "BlueCube1",
-            "RedCube1",
-            "Pixel"
     };
 
     BHI260IMU imu;
@@ -240,20 +238,20 @@ public class AutoV4BlueClose extends LinearOpMode {
                     } else if(pixelLocation == "center"){
                         currentStep = 8;
                     } else { //if Right position
-                        moveDistance(0.5,-6);
+                        moveDistance(0.5,-12);
                         currentStep = 10;
                     }
                 }
 
                 //Step 3 - turn towards left spike
                 if(currentStep == 3){
-                    turn(26.57);
+                    turn(16);
                     stopRobot();
                     currentStep = 4;
                 }
                 //Step 4 - move forward towards left spike mark
                 if(currentStep == 4){
-                    moveDistance(0.5, -(20 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5, -(14.5 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     sleep(50);
                     currentStep = 5;
@@ -261,7 +259,7 @@ public class AutoV4BlueClose extends LinearOpMode {
 
                 //Step 5 - back away from spike mark to drop off purple pixel
                 if(currentStep == 5){
-                    moveDistance(0.5, (20 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5, (14.5 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     sleep(50);
                     currentStep = 6;
@@ -269,14 +267,14 @@ public class AutoV4BlueClose extends LinearOpMode {
 
                 //Step 6 - point towards Center from left spike mark
                 if(currentStep == 6){
-                    turn(-(26.57));
+                    turn(-(16));
                     stopRobot();
                     currentStep = 14;
                 }
 
                 //Step 8 - move forward towards center spike mark
                 if(currentStep == 8){
-                    moveDistance(0.5,-(22 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5,-(20 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     sleep(50);
                     currentStep = 9;
@@ -284,20 +282,20 @@ public class AutoV4BlueClose extends LinearOpMode {
 
                 //Step 9 - back away from center mark, dropping off purple pixel
                 if(currentStep == 9){
-                    moveDistance(0.5,(22+DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5,(20+DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     currentStep = 14;
                 }
                 //Step 10 - turn towards right spike mark
                 if(currentStep == 10){
-                    turn(-(51.34));
+                    turn(-(45));
                     stopRobot();
                     currentStep = 11;
                 }
 
                 //Step 11 - move forward towards right spike mark
                 if(currentStep == 11){
-                    moveDistance(0.5, -(19.2 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5, -(10 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     sleep(50);
                     currentStep = 12;
@@ -305,20 +303,22 @@ public class AutoV4BlueClose extends LinearOpMode {
 
                 //Step 12 - move backward from right spike
                 if(currentStep == 12){
-                    moveDistance(0.5, (19.2 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5, (10 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     currentStep = 13;
                 }
 
                 //Step 13 - point towards center from right spike
                 if(currentStep == 13){
-                    turn((51.34));
+                    turn((45));
                     stopRobot();
                     currentStep = 14;
                 }
 
                 //Step 14 - turn to face backdrop
                 if(currentStep == 14){
+                    strafe(0.7,650,false);
+                    stopRobot();
                     turn(90);
                     stopRobot();
                     currentStep = 18;
@@ -327,11 +327,11 @@ public class AutoV4BlueClose extends LinearOpMode {
                 //STep 18 - strafe right to center around backdrop (or can put it to a certain amount depending on pixel location)
                 if(currentStep == 18){
                     if(pixelLocation == "left"){
-                        strafe(0.7, 700, true);
+                        strafe(0.7, 200, true);
                     } else if (pixelLocation == "center"){
-                        strafe(0.7,500, true);
+                        strafe(0.7,400, true);
                     } else{
-                        strafe(0.7,300,true);
+                        strafe(0.7,350,true);
                     }
                     stopRobot();
                     currentStep = 20;
@@ -343,7 +343,7 @@ public class AutoV4BlueClose extends LinearOpMode {
                     //Start up april tag
                     initAprilTag();
                     sleep(50);
-                    setManualExposure(20, 250); //reduce motion blur
+                    setManualExposure(4, 250); //reduce motion blur
 
                     if (pixelLocation == "left") {
                         DESIRED_TAG_ID = 1;
@@ -440,16 +440,19 @@ public class AutoV4BlueClose extends LinearOpMode {
                 if(currentStep == 26){
                     if(pixelLocation == "left")
                     {
-                        strafe(0.7,900,false);
+                        strafe(0.7,300,false);
                     }
                     else if (pixelLocation == "center"){
                         strafe(0.7,600,false);
                     } else{
-                        strafe(0.7,300,false);
+                        strafe(0.7,900,false);
                     }
                     sleep(10);
                     claw.setPower(0);
                     turn(90);
+                    if(pixelLocation != "left"){
+                        moveDistance(0.5,-6);
+                    }
                     stopRobot();
                     currentStep = 27;
                 }

@@ -71,7 +71,7 @@ import java.util.concurrent.TimeUnit;
 //@Disabled
 public class AutoV4RedClose extends LinearOpMode {
 
-    double DESIRED_DISTANCE = 5; // how close the camera should get to the object (inches)
+    double DESIRED_DISTANCE = 4; // how close the camera should get to the object (inches)
 
     final double SPEED_GAIN  =  0.03  ;   // Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
     final double STRAFE_GAIN =  0.015 ;   // Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
@@ -108,11 +108,9 @@ public class AutoV4RedClose extends LinearOpMode {
     static final int MAX_ARM_POSITION = 705;
 
     static final int ARM_ANGLE_POSITION_FROM_MAX = 180; //546
-    private static final String TFOD_MODEL_ASSET = "RedCube.tflite";
+    private static final String TFOD_MODEL_ASSET = "RedCubeNEW.tflite";
     private static final String[] LABELS = {
-            "BlueCube1",
             "RedCube1",
-            "Pixel"
     };
 
     BHI260IMU imu;
@@ -236,7 +234,7 @@ public class AutoV4RedClose extends LinearOpMode {
                     moveDistance(0.5,-6);
                     stopRobot();
                     if(pixelLocation == "left"){
-                        moveDistance(0.5,-6);
+                        moveDistance(0.5,-10);
                         currentStep = 3;
                     } else if(pixelLocation == "center"){
                         currentStep = 8;
@@ -247,13 +245,13 @@ public class AutoV4RedClose extends LinearOpMode {
 
                 //Step 3 - turn towards left spike
                 if(currentStep == 3){
-                    turn(36.87);
+                    turn(26);
                     stopRobot();
                     currentStep = 4;
                 }
                 //Step 4 - move forward towards left spike mark
                 if(currentStep == 4){
-                    moveDistance(0.5, -(15 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5, -(10 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     sleep(50);
                     currentStep = 5;
@@ -261,7 +259,7 @@ public class AutoV4RedClose extends LinearOpMode {
 
                 //Step 5 - back away from spike mark to drop off purple pixel
                 if(currentStep == 5){
-                    moveDistance(0.5, (15 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5, (10 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     sleep(50);
                     currentStep = 6;
@@ -269,14 +267,14 @@ public class AutoV4RedClose extends LinearOpMode {
 
                 //Step 6 - point towards Center from left spike mark
                 if(currentStep == 6){
-                    turn(-(36.87));
+                    turn(-(26));
                     stopRobot();
                     currentStep = 14;
                 }
 
                 //Step 8 - move forward towards center spike mark
                 if(currentStep == 8){
-                    moveDistance(0.5,-(22 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5,-(21 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     sleep(50);
                     currentStep = 9;
@@ -284,20 +282,20 @@ public class AutoV4RedClose extends LinearOpMode {
 
                 //Step 9 - back away from center mark, dropping off purple pixel
                 if(currentStep == 9){
-                    moveDistance(0.5,(22+DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5,(21+DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     currentStep = 14;
                 }
                 //Step 10 - turn towards right spike mark
                 if(currentStep == 10){
-                    turn(-(35.84));
+                    turn(-(28));
                     stopRobot();
                     currentStep = 11;
                 }
 
                 //Step 11 - move forward towards right spike mark
                 if(currentStep == 11){
-                    moveDistance(0.5, -(22.2 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5, -(15 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     sleep(50);
                     currentStep = 12;
@@ -305,33 +303,35 @@ public class AutoV4RedClose extends LinearOpMode {
 
                 //Step 12 - move backward from right spike
                 if(currentStep == 12){
-                    moveDistance(0.5, (22.2 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5, (15 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     currentStep = 13;
                 }
 
                 //Step 13 - point towards center from right spike
                 if(currentStep == 13){
-                    turn((35.84));
+                    turn((28));
                     stopRobot();
                     currentStep = 14;
                 }
 
                 //Step 14 - turn to face backdrop
                 if(currentStep == 14){
-                    turn(-90);
+                    strafe(0.7,650,true);
+                    stopRobot();
+                    turnTo(-90);
                     stopRobot();
                     currentStep = 18;
                 }
 
-                //STep 18 - strafe right to center around backdrop (or can put it to a certain amount depending on pixel location)
+                //STep 18 - strafe left to center around backdrop (or can put it to a certain amount depending on pixel location)
                 if(currentStep == 18){
                     if(pixelLocation == "left"){
-                        strafe(0.7, 900, true);
+                        strafe(0.7, 350, false);
                     } else if (pixelLocation == "center"){
-                        strafe(0.7,700, true);
+                        strafe(0.7,400, false);
                     } else{
-                        strafe(0.7,500,true);
+                        strafe(0.7,200,false);
                     }
                     stopRobot();
                     currentStep = 20;
@@ -343,14 +343,14 @@ public class AutoV4RedClose extends LinearOpMode {
                     //Start up april tag
                     initAprilTag();
                     sleep(50);
-                    setManualExposure(20, 250); //reduce motion blur
+                    setManualExposure(4, 250); //reduce motion blur
 
                     if (pixelLocation == "left") {
-                        DESIRED_TAG_ID = 1;
+                        DESIRED_TAG_ID = 4;
                     } else if (pixelLocation == "center") {
-                        DESIRED_TAG_ID = 2;
+                        DESIRED_TAG_ID = 5;
                     } else {
-                        DESIRED_TAG_ID = 3;
+                        DESIRED_TAG_ID = 6;
                     }
 
                     currentStep = 21;
@@ -450,6 +450,9 @@ public class AutoV4RedClose extends LinearOpMode {
                     sleep(10);
                     claw.setPower(0);
                     turn(-90);
+                    if(pixelLocation != "left"){
+                        moveDistance(0.5,-6);
+                    }
                     stopRobot();
                     currentStep = 27;
                 }

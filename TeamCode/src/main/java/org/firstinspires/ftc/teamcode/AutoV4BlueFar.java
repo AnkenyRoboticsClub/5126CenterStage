@@ -108,11 +108,9 @@ public class AutoV4BlueFar extends LinearOpMode {
     static final int MAX_ARM_POSITION = 705;
 
     static final int ARM_ANGLE_POSITION_FROM_MAX = 180; //546
-    private static final String TFOD_MODEL_ASSET = "BlueCube.tflite";
+    private static final String TFOD_MODEL_ASSET = "BlueCubeNEW.tflite";
     private static final String[] LABELS = {
             "BlueCube1",
-            "RedCube1",
-            "Pixel"
     };
 
     BHI260IMU imu;
@@ -203,7 +201,7 @@ public class AutoV4BlueFar extends LinearOpMode {
                 //runtime.reset();
                 //Step 1 - use Tensorflow to check for team prop on left and center spike
                 if (currentStep == 1) {
-                    if(runtime.milliseconds() < 4000){
+                    if(runtime.milliseconds() < 2000){
                         List<Recognition> currentRecognitions = tfod.getRecognitions();
                         //go through list of recognitions and look for cube
                         for(Recognition recognition : currentRecognitions){
@@ -236,7 +234,7 @@ public class AutoV4BlueFar extends LinearOpMode {
                     moveDistance(0.5,-6);
                     stopRobot();
                     if(pixelLocation == "left"){
-                        moveDistance(0.5,-6);
+                        moveDistance(0.5,-10);
                         currentStep = 3;
                     } else if(pixelLocation == "center"){
                         currentStep = 8;
@@ -247,13 +245,13 @@ public class AutoV4BlueFar extends LinearOpMode {
 
                 //Step 3 - turn towards left spike
                 if(currentStep == 3){
-                    turn(36.87);
+                    turn(26);
                     stopRobot();
                     currentStep = 4;
                 }
                 //Step 4 - move forward towards left spike mark
                 if(currentStep == 4){
-                    moveDistance(0.5, -(15 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5, -(12 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     sleep(50);
                     currentStep = 5;
@@ -261,7 +259,7 @@ public class AutoV4BlueFar extends LinearOpMode {
 
                 //Step 5 - back away from spike mark to drop off purple pixel
                 if(currentStep == 5){
-                    moveDistance(0.5, (15 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5, (12 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     sleep(50);
                     currentStep = 6;
@@ -269,14 +267,14 @@ public class AutoV4BlueFar extends LinearOpMode {
 
                 //Step 6 - point towards Center from left spike mark
                 if(currentStep == 6){
-                    turn(-(36.87));
+                    turn(-(26));
                     stopRobot();
                     currentStep = 14;
                 }
 
                 //Step 8 - move forward towards center spike mark
                 if(currentStep == 8){
-                    moveDistance(0.5,-(22 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5,-(21 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     sleep(50);
                     currentStep = 9;
@@ -284,20 +282,20 @@ public class AutoV4BlueFar extends LinearOpMode {
 
                 //Step 9 - back away from center mark, dropping off purple pixel
                 if(currentStep == 9){
-                    moveDistance(0.5,(22+DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5,(21+DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     currentStep = 14;
                 }
                 //Step 10 - turn towards right spike mark
                 if(currentStep == 10){
-                    turn(-(35.84));
+                    turn(-(28));
                     stopRobot();
                     currentStep = 11;
                 }
 
                 //Step 11 - move forward towards right spike mark
                 if(currentStep == 11){
-                    moveDistance(0.5, -(22.2 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5, -(15 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     sleep(50);
                     currentStep = 12;
@@ -305,51 +303,67 @@ public class AutoV4BlueFar extends LinearOpMode {
 
                 //Step 12 - move backward from right spike
                 if(currentStep == 12){
-                    moveDistance(0.5, (22.2 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
+                    moveDistance(0.5, (15 + DISTANCE_BETWEEN_PIXEL_AND_FRONT));
                     stopRobot();
                     currentStep = 13;
                 }
 
                 //Step 13 - point towards center from right spike
                 if(currentStep == 13){
-                    turn((35.84));
+                    turn((28));
                     stopRobot();
                     currentStep = 14;
                 }
 
                 //Step 14 - Strafe right to go around spike marks
                 if(currentStep == 14){
-                    strafe(0.7,400, true);
+                    if(pixelLocation == "right"){
+                        strafe(0.25,550,false);
+                        turnTo(0);
+                    }
+                    else{
+                        strafe(0.25,1700,true);
+                        stopRobot();
+                        turnTo(0-3);
+                    }
                     stopRobot();
                     currentStep = 15;
                 }
 
                 //Step 15 - move forward after the spike marks and trusses
                 if(currentStep == 15){
-                    moveDistance(0.5,-46);
+                    if(pixelLocation == "left"){
+                        moveDistance(0.5,-38);
+                    } else{
+                        moveDistance(0.5,-48);
+                    }
                     stopRobot();
                     currentStep = 16;
                 }
                 //Step 16 - turn 90 degrees left
                 if(currentStep == 16){
-                    turn((90));
+                    turn((90+2));
                     stopRobot();
                     currentStep = 17;
                 }
                 //Step 17 - Move forward twoards the backdrop
                 if(currentStep == 17){
-                    moveDistance(0.5, -90);
+                    if(pixelLocation == "right"){
+                        moveDistance(0.5,-73);
+                    } else {
+                        moveDistance(0.5,-82);
+                    }
                     stopRobot();
                     currentStep = 18;
                 }
                 //STep 18 - strafe right to center around backdrop (or can put it to a certain amount depending on pixel location)
                 if(currentStep == 18){
                     if(pixelLocation == "left"){
-                        strafe(0.7, 900, false);
+                        strafe(0.7, 950, false);
                     } else if (pixelLocation == "center"){
-                        strafe(0.7,700, false);
+                        strafe(0.7,750, false);
                     } else{
-                        strafe(0.7,500,false);
+                        strafe(0.7,600,false);
                     }
                     stopRobot();
                     currentStep = 20;
@@ -359,9 +373,13 @@ public class AutoV4BlueFar extends LinearOpMode {
                     visionPortal.close();
                     sleep(50);
                     //Start up april tag
+                    arm.setPower(0.55);
+                    ((DcMotorEx) arm).setVelocity(1000);
+                    arm.setTargetPosition(MAX_ARM_POSITION - ARM_ANGLE_POSITION_FROM_MAX);
+                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     initAprilTag();
                     sleep(50);
-                    setManualExposure(20, 250); //reduce motion blur
+                    setManualExposure(4, 250); //reduce motion blur
 
                     if (pixelLocation == "left") {
                         DESIRED_TAG_ID = 1;
@@ -434,10 +452,6 @@ public class AutoV4BlueFar extends LinearOpMode {
                 }
                 //Step 24 - raise arm to drop position
                 if (currentStep == 24){
-                    arm.setPower(0.55);
-                    ((DcMotorEx) arm).setVelocity(1000);
-                    arm.setTargetPosition(MAX_ARM_POSITION - ARM_ANGLE_POSITION_FROM_MAX);
-                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     while(arm.isBusy()){
 
                     }
