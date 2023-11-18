@@ -150,9 +150,9 @@ public class FieldCentric_TeleOpV3 extends LinearOpMode {
                 boostPower = 0;
             }
 
-            if (gamepad2.left_stick_y != 0 ){
+            if (gamepad2.left_stick_y > 0.5 || gamepad2.left_stick_y < 0.5 ){
                 armHold = false;
-                armPower = -gamepad2.left_stick_y/2;
+                armPower = -gamepad2.left_stick_y/1;
             } else{
                 armHold = true;
                 if (armPower != 0) {
