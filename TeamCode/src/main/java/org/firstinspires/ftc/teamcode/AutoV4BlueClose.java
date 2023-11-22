@@ -329,12 +329,10 @@ public class AutoV4BlueClose extends LinearOpMode {
                     if(pixelLocation == "left"){
                         strafe(0.7, 200, true);
                     } else if (pixelLocation == "center"){
-                        strafe(0.7,600, true);
+                        strafe(0.7,400, true);
                     } else{
-                        strafe(0.7,710,true);
+                        strafe(0.7,350,true);
                     }
-                    //stopRobot();
-                    //moveDistance(0.5, -8);
                     stopRobot();
                     currentStep = 20;
                 }
@@ -457,29 +455,6 @@ public class AutoV4BlueClose extends LinearOpMode {
                     }
                     stopRobot();
                     currentStep = 27;
-                }
-
-                //backup step because idk how to fix april tag
-                if(currentStep == 28){
-                    moveDistance(0.5, -15);
-                    stopRobot();
-                    arm.setPower(0.55);
-                    ((DcMotorEx) arm).setVelocity(1000);
-                    arm.setTargetPosition(MAX_ARM_POSITION - ARM_ANGLE_POSITION_FROM_MAX);
-                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    while(arm.isBusy()){
-
-                    }
-                    sleep(300);
-                    claw.setPower(-1); //drops pixel
-                    sleep(200);
-
-                    arm.setTargetPosition(MIN_ARM_POSITION);
-                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    sleep(100);
-                    //currentStep = 26;
-
-                    currentStep = 29;
                 }
 
                 //Step 27 - may need to rotate to a good position
